@@ -1,0 +1,206 @@
+/*Single Linked List Operations*/
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef struct node
+{
+    int data;
+    struct node *link;
+}stnd;
+int len;
+stnd *root= NULL;
+void append(void);
+void addatpos(void);
+void addatbegin(void);
+int length(void);
+void display(void);
+void delete(void);
+void reverse(void);
+
+void append()
+{
+    stnd *temp;
+    temp=(stnd *)malloc(sizeof(stnd));
+    printf("Enter node data: ");
+    scanf("%d",&temp->data);
+    temp->link = NULL;
+    if(root==NULL)      //List is empty
+    {
+        root=temp;
+    }
+    else        //List is not empty
+    {
+        stnd *p=root;
+        while(p->link!=NULL)
+        {
+            p=p->link;
+        }
+        p->link=temp;
+    }
+}
+void addatpos()
+{
+    stnd *temp = (stnd *)malloc(sizeof(stnd)),*p = root,*q;
+    int pos,i=1,len=length();
+    printf("Enter position: ");
+    scanf("%d",&pos);
+    if(pos>len+1)
+    {
+        printf("List not long enough!\n\n");
+    }
+    else if(pos==len+1)
+    {
+        append();
+    }
+    else if(pos<1)
+    {
+        printf("Position should be greater than 1!\n\n");
+    }
+    else
+    {
+        printf("Enter node data: ");
+        scanf("%d",&temp->data);
+        while(i<pos-1)
+        {
+            p=p->link;
+            i++;
+        }
+        q=p->link;
+        p->link=temp;
+        temp->link=q;
+    }
+}
+void addatbegin()
+{
+    stnd *temp = (stnd *)malloc(sizeof(stnd));
+    printf("Enter node data: ");
+    scanf("%d",&temp->data);
+    temp->link=root;
+    root=temp;
+    display();
+}
+int length()
+{
+    int count = 0;
+    stnd *temp;
+    temp=root;
+    while(temp!=NULL)
+    {
+        count++;
+        temp=temp->link;
+    }
+    return count;
+}
+void display()
+{
+    stnd *temp;
+    temp=root;
+    if(temp==NULL)
+    {
+        printf("List is empty.\n\n");
+    }
+    else
+    {
+        while(temp!=NULL)
+        {
+            printf("%d-->",temp->data);
+            temp=temp->link;
+        }
+        printf("Null\n\n");
+    }
+}
+void delete()
+{
+    stnd *temp;
+    int loc;
+    if(root==NULL)
+    {
+        printf("List is empty!\n");
+        return;
+    }
+    printf("Enter delete location: ");
+    scanf("%d",&loc);
+    if(loc>length())
+    {
+        printf("No node present at the entered location: ");
+    }
+    else if(loc==1)
+    {
+        temp=root;
+        root=temp->link;
+        temp->link=NULL;
+        free(temp);
+        printf("After deleting node: ");
+    }
+    else
+    {
+        stnd *p=root,*q;
+        int i=1;
+        while(i<loc-1)
+        {
+            p=p->link;
+            i++;
+        }
+        q=p->link;
+        p->link=q->link;
+        q->link=NULL;
+        free(q);
+        printf("After deleting node: ");
+    }
+    display();
+}
+void reverse()
+{
+    stnd *p,*q;
+    p=q=root;
+    int i=0,j=length()-1,k=0,temp;
+    while(i<j)
+    {
+        while(k<j)
+        {
+            q=q->link;
+            k++;
+        }
+        temp=p->data;
+        p->data=q->data;
+        q->data=temp;
+        i++,j--;
+        p=p->link;
+        q=root;
+    }
+    display();
+}
+int main()
+{
+    int ch;
+    printf("1.Append\n2.Add at beginning\n3.Add at position\n4.Length\n5.Display\n");
+    printf("6.Delete node\n7.Reverse List\n8.Exit\n\n");
+    while(1)
+    {
+        printf("Enter choice: ");
+        scanf("%d",&ch);
+        switch(ch)
+        {
+            case 1: append();
+            break;
+            case 2: addatbegin();
+            break;
+            case 3: addatpos();
+            break;
+            case 4: len=length();
+            printf("Length of list = %d\n\n",len);
+            break;
+            case 5: display();
+            break;
+            case 6: delete();
+            break;
+            case 7: reverse();
+            break;
+            case 8: exit(1);
+            break;
+            default:    printf("Wrong choice..\n\n");
+            break;
+        }
+    }
+    return 0;
+}
